@@ -13,6 +13,54 @@ int BTCdb::check_csv(std::string &file)
         return (0);
     return (1);
 }
+void    BTCdb::check_date_format(std::string date, int line)
+{
+    int year;
+    int month;
+    int day;
+    for (size_t    i = 0; i < date.length(); i++)
+    {
+        if (!isdigit(date[i]) && date[i] != '-')
+            throw  std::runtime_error("wrong charachter in date\n");
+        if (date[i] == '-' && !(i ==  4 || i == 7))
+        {
+            std::cout << "on line " << line << " ";
+         throw  std::runtime_error("we expect the time to be 10 char in lenght, if you use one digit number please padd it with a zero\n\n");
+        }  
+    }
+    year = atoi( date.substr(0 ,4).c_str());
+    month = atoi(date.substr(5, 2).c_str());
+    day = atoi(date.substr(8, 2).c_str());
+    if (month > 12 || day > 31)
+         throw  std::runtime_error("month cant be bigger than 12 and days cant be bigger than 31\n");
+    if (month == 2 && day > 28 && (year %4))
+        {
+            std::cout << "year " << year << " is not a leap year day " << day << " is incorect\n";
+            throw  std::runtime_error("");
+        }
+
+    std::cout << year << " "<< month << " "<< day << std::endl;
+}
+double    BTCdb::check_amount_format(std::string amount)
+{
+    double aunt;
+    char    *end;
+    int f;
+    f = 0;
+    std ::cout<< amount << std::endl; 
+    for (size_t i = 0; i < amount.length(); i++)
+    {
+        if (!isdigit(amount[i]) && amount[i] != '.' )
+            throw  std::runtime_error("amout should have only numbers and a point for floats\n");
+        if (amount[i] == '.')
+            f++;
+        if (f > 1)
+            throw  std::runtime_error("mltiple points are not allowed in values\n");
+
+    }
+    aunt = strtod(amount.c_str(), &end);
+    return aunt;
+}
 
 void    BTCdb::set_main_db(std::string file)
 {
@@ -21,17 +69,22 @@ void    BTCdb::set_main_db(std::string file)
 
     if (file.length() < 4 || this->check_csv(file))
         throw  std::runtime_error("database file is not csv\n");
-    csvfile.open(file, std::ios::in);
+    csvfile.open(file.c_str(), std::ios::in);
     if (!csvfile.is_open())
         throw  std::runtime_error("coudn't open csv file\n");
     std::getline(csvfile, line);
     if (line != "date,exchange_rate")
         throw std::runtime_error("the database header is not configured properly\n");
+    int i = 1;
     while (std::getline(csvfile, line))
     {
+        i++;
         if (line.length() < 12)
-            throw std::runtime_error("string lenght dosn't match the exected input\n");
-        
+            throw std::runtime_error("we expect the time to be 10 char in lenght, if you use one digit number please padd it with a zero\n");
+        this->check_date_format(line.substr(0, 10), i);
+        if (line[10] != ',')
+            throw std::runtime_error("please use comma directly after the date \n");
+        this->check_amount_format(line.substr(11 , line.length() - 10));
     }
     csvfile.close();
 }
@@ -40,7 +93,7 @@ void    BTCdb::evaluate(std::string file)
     std::ifstream csvfile;
     std::string     line;
 
-    csvfile.open(file, std::ios::in);
+    csvfile.open(file.c_str(), std::ios::in);
     if (!csvfile.is_open())
         throw  std::runtime_error("coudn't open csv file\n");
     std::getline(csvfile, line);

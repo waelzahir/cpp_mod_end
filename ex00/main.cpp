@@ -11,6 +11,7 @@ int main(int ac, char   **av)
     try
     {
         db.set_main_db("data.csv");
+        db.printmap();
         db.evaluate(av[1]);
     }
     catch (std::exception & e)

@@ -5,6 +5,9 @@ BTCdb::BTCdb(){}
 BTCdb::BTCdb(const BTCdb &rhs){(void)rhs;}
 BTCdb &BTCdb::operator= (const BTCdb &rhs){(void)rhs;return *this;}
 BTCdb::~BTCdb(){}
+void    BTCdb::printmap()
+{
+}
 
 int BTCdb::check_csv(std::string &file)
 {
@@ -38,8 +41,6 @@ void    BTCdb::check_date_format(std::string date, int line)
             std::cout << "year " << year << " is not a leap year day " << day << " is incorect\n";
             throw  std::runtime_error("");
         }
-
-    std::cout << year << " "<< month << " "<< day << std::endl;
 }
 double    BTCdb::check_amount_format(std::string amount)
 {
@@ -47,7 +48,6 @@ double    BTCdb::check_amount_format(std::string amount)
     char    *end;
     int f;
     f = 0;
-    std ::cout<< amount << std::endl; 
     for (size_t i = 0; i < amount.length(); i++)
     {
         if (!isdigit(amount[i]) && amount[i] != '.' )
@@ -61,12 +61,18 @@ double    BTCdb::check_amount_format(std::string amount)
     aunt = strtod(amount.c_str(), &end);
     return aunt;
 }
+int BTCdb::date_toNum(std::string date)
+{
+    date.erase(7, 1);
+    date.erase(4, 1);
+    return ( atoi(date.c_str()));
+}
 
 void    BTCdb::set_main_db(std::string file)
 {
     std::ifstream csvfile;
     std::string     line;
-
+    double   amount;
     if (file.length() < 4 || this->check_csv(file))
         throw  std::runtime_error("database file is not csv\n");
     csvfile.open(file.c_str(), std::ios::in);
@@ -84,7 +90,8 @@ void    BTCdb::set_main_db(std::string file)
         this->check_date_format(line.substr(0, 10), i);
         if (line[10] != ',')
             throw std::runtime_error("please use comma directly after the date \n");
-        this->check_amount_format(line.substr(11 , line.length() - 10));
+        amount = this->check_amount_format(line.substr(11 , line.length() - 10));
+        this->map.insert({this->date_toNum(line.substr(0, 10)), amount });
     }
     csvfile.close();
 }

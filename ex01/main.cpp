@@ -3,7 +3,14 @@
 int main(int ac, char   **av)
 {
     if (ac != 2)
-        return (1)
+        return (1);
     RPN rpn;
-    rpn.parse_expretion(av[1])
+    try
+    {
+        rpn.parse_expretion(av[1]);
+    }
+    catch (std::exception & e)
+    {
+        std::cout << e.what();
+    }
 }

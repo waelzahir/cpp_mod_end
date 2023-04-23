@@ -12,7 +12,7 @@ INC= $(addsuffix .hpp, $(NAMES))
 
 all: $(NAME)
 
-$(NAME): $(OBJ)
+$(NAME): $(OBJ) $(MAIN)
 	$(CC) $(CFLAGS) $(MAIN) $(OBJ) -o $(NAME)
 
 

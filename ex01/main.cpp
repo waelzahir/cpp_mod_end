@@ -7,6 +7,7 @@ int main(int ac, char   **av)
     RPN rpn;
     try
     {
+    
         rpn.parse_expretion(av[1]);
         std::cout << rpn.get_res() << std::endl;
     }

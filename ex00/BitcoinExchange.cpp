@@ -160,13 +160,25 @@ int BTCdb::check_amount_to_calc(std::string str, std::string date)
         str.erase(str.length() - 1, 1);
     if (!str.length())
                 return std::cout << "the argument needs an amount\n", 1;
-
+    if (str[0] == '-')
+        return std::cout << "Error: not a positive number.\n", 1;
+    int i = 0;
+    int p = 0;
+    while (str[i])
+    {
+        if (!isdigit(str[i]) && str[i] != '.')
+            return std::cout << "config error\n", 1;
+        if (str[i] =='.')
+            p++;
+        i++;    
+    }
+    if (p > 1)
+        return std::cout << "you cant have more than a point in a value\n", 1;
        char *end;
        double aunt = strtod(str.c_str(), &end);
     if (aunt > 1000)
         return std::cout << "Error: too large a number.\n", 1;
-    if (aunt< 0)
-        return std::cout << "Error: not a positive number.\n", 1;
+    
     std::cout << date << " => "<< str << " => " << map.lower_bound(date)->second * aunt<< std::endl;
     return (0);
 }

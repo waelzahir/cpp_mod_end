@@ -10,7 +10,7 @@
 class   BTCdb
 {
     private:
-    std::map<int, double> map;
+    std::map<std::string, double> map;
     
     public:
 
@@ -24,6 +24,8 @@ class   BTCdb
     void    check_date_format(std::string date, int i);
     double    check_amount_format(std::string amount);
     int date_toNum(std::string date);
+    int check_exchange_date(std::string date);
+    int check_amount_to_calc(std::string str, std::string date);
     void    printmap();
 };
 #endif

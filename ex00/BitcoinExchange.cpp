@@ -7,6 +7,9 @@ BTCdb &BTCdb::operator= (const BTCdb &rhs){(void)rhs;return *this;}
 BTCdb::~BTCdb(){}
 void    BTCdb::printmap()
 {
+    std::string o = "2009-00-17";
+    auto p = map.lower_bound(o);
+    std ::cout << p->first << " " << p->second << std::endl;
 }
 
 int BTCdb::check_csv(std::string &file)
@@ -34,7 +37,7 @@ void    BTCdb::check_date_format(std::string date, int line)
     year = atoi( date.substr(0 ,4).c_str());
     month = atoi(date.substr(5, 2).c_str());
     day = atoi(date.substr(8, 2).c_str());
-    if (month > 12 || day > 31)
+    if (month > 12 || day > 31 || day == 0 || month == 0)
          throw  std::runtime_error("month cant be bigger than 12 and days cant be bigger than 31\n");
     if (month == 2 && day > 28 && (year %4))
         {
@@ -91,9 +94,35 @@ void    BTCdb::set_main_db(std::string file)
         if (line[10] != ',')
             throw std::runtime_error("please use comma directly after the date \n");
         amount = this->check_amount_format(line.substr(11 , line.length() - 10));
-        this->map.insert({this->date_toNum(line.substr(0, 10)), amount });
+        this->map.insert({line.substr(0, 10), amount });
     }
     csvfile.close();
+}
+int BTCdb::check_exchange_date(std::string date)
+{
+    int year;
+    int month;
+    int day;
+    for (size_t    i = 0; i < date.length(); i++)
+    {
+        if (!isdigit(date[i]) && date[i] != '-')
+            return std::cout << "Error: bad input => " << date << std::endl, 1;
+        if (date[i] == '-' && !(i ==  4 || i == 7))
+        {
+            return std::cout << "Error: bad input => " << date << std::endl, 1;
+        }  
+    }
+    year = atoi( date.substr(0 ,4).c_str());
+    month = atoi(date.substr(5, 2).c_str());
+    day = atoi(date.substr(8, 2).c_str());
+    if (month > 12 || day > 31 || day == 0 || month == 0)
+         return std::cout << "Error: bad input => " << date << std::endl, 1;
+    if (month == 2 && day > 28 && (year %4))
+        {
+            std::cout << "year " << year << " is not a leap year day " << day << " is incorect\n";
+            return (1);
+        }
+    return (0);
 }
 void    BTCdb::evaluate(std::string file)
 {
@@ -108,7 +137,36 @@ void    BTCdb::evaluate(std::string file)
         throw std::runtime_error("the input header is not configured properly\n");
     while (std::getline(csvfile, line))
     {
-        
+        if (!this->check_exchange_date(line.substr(0, 10)))
+        {
+            this->check_amount_to_calc(line.substr(10, line.length() - 10), line.substr(0, 10));
+        }
     }
     csvfile.close();
+}
+
+int BTCdb::check_amount_to_calc(std::string str, std::string date)
+{
+    
+    while (str[0] == ' ')
+        str.erase(0, 1);
+    if (str[0] ==  '|')
+        str.erase(0, 1);
+    else
+        return std::cout << "please separate the amount and date with a pipe\n", 1;
+    while (str[0] == ' ')
+        str.erase(0, 1);
+     while ( (str.length() - 1) && str[str.length() - 1] == ' ')
+        str.erase(str.length() - 1, 1);
+    if (!str.length())
+                return std::cout << "the argument needs an amount\n", 1;
+
+       char *end;
+       double aunt = strtod(str.c_str(), &end);
+    if (aunt > 1000)
+        return std::cout << "Error: too large a number.\n", 1;
+    if (aunt< 0)
+        return std::cout << "Error: not a positive number.\n", 1;
+    std::cout << date << " => "<< str << " => " << map.lower_bound(date)->second * aunt<< std::endl;
+    return (0);
 }

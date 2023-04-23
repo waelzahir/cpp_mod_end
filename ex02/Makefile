@@ -1,10 +1,10 @@
-NAME= 
+NAME= PmergeMe
 CC= c++
 CFLAGS= -Wall -Wextra -Werror -std=c++98
 
 MAIN= main.cpp
 
-NAMES= 
+NAMES= PmergeMe
 SRC= $(addsuffix .cpp, $(NAMES))
 OBJ= $(addsuffix .o, $(NAMES))
 INC= $(addsuffix .hpp, $(NAMES))

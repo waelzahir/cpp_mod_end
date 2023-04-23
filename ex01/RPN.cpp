@@ -59,15 +59,51 @@ void    RPN::parse_expretion(std::string line)
         if (this->is_valid())
             throw std::runtime_error("invalid character\n");
     }
-    this->print();
 }
 void    RPN::decide(std::string str)
 {
-    if (chars(str[0]))
-        op.push(str[0]);
+    int first = 0;
+    int second = 0;
     if (isdigit(str[0]))
-        num.push(atoi(str.c_str()));
+        {
+            rpn.push(atoi(str.c_str()));
+            return ;
+        }
+    if (rpn.size() < 2)
+        throw std::runtime_error("invalid rpn notation\n");
+    if (chars(str[0]))
+    {
+        first = rpn.top();
+        rpn.pop();
+        second = rpn.top();
+        rpn.pop();
+        rpn.push(this->apply_operation(str[0], first, second));
+    }
+}
 
+int    RPN::apply_operation(int op, int num1, int num2)
+{
+    switch (op)
+    { 
+    case 45:
+        return (num1 - num2);
+    case 43:
+        return (num1 + num2);
+    case 42:
+        return (num1 * num2);
+    case 47:
+        return (num1 / num2);
+    default:
+        return (0);
+    }
+    return (0);
+}
+int RPN::get_res()
+{
+    if (rpn.size() > 1)
+            throw std::runtime_error("invalid rpn notation\n");
+
+    return (rpn.top());
 }
 
 int chars(char  c)

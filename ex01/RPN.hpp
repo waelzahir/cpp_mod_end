@@ -10,8 +10,8 @@ class RPN
     private:
         std::string expr;
         int i;
-        std::stack<int> num;
-        std::stack<char> op;
+        int acumulator;
+        std::stack<int> rpn;
     public:
     
     RPN();
@@ -23,19 +23,8 @@ class RPN
     void    decide(std::string str);
     int     is_valid();
     std::string get_token();
-    void    print()
-    {
-        while (num.size())
-            {
-                std::cout << num.top() << std::endl;
-                num.pop();
-            }
-        while (op.size())
-        { 
-            std::cout << op.top()<<std::endl;
-            op.pop();
-        }
-    }
+    int    apply_operation(int op, int num1, int num2);
+    int get_res();
 };
 
 int chars(char  c);

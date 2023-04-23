@@ -3,11 +3,13 @@
 #include <iostream>
 #include <cstdlib>
 #include <vector>
+#include <deque>
 class PmergeMe
 {
     private:
         std::vector <int> vec;
-        std::string str;
+        std::deque <int> deq;
+         std::string str;
         int i;
     public:
     PmergeMe();

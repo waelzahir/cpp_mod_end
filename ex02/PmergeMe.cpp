@@ -18,6 +18,7 @@ void    PmergeMe::parse(std::string str)
         num = this->get_number();
         std::cout << num<<std::endl;
         vec.push_back(num);
+        deq.push_back(num);
         this->is_valid();
     }
 }

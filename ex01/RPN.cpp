@@ -30,14 +30,9 @@ std::string RPN::get_token()
 
     start = this->i;
     size = 0;
-    if (chars(this->cursor()))
-        return (this->i++, expr.substr(start, 1));
-    while (isdigit(this->cursor()))
-    {
-        this->i++;
-        size++;
-    }
-    return (expr.substr(start, size));
+
+      this->i++;
+      return( expr.substr(start, 1));
 }
 
 int     RPN::is_valid()
@@ -55,6 +50,8 @@ void    RPN::parse_expretion(std::string line)
     while (this->cursor())
     {
         this->skip_spaces();
+        if (!this->cursor())
+            break ;
         this->decide(this->get_token());
         if (this->is_valid())
             throw std::runtime_error("invalid character\n");
@@ -73,12 +70,15 @@ void    RPN::decide(std::string str)
         throw std::runtime_error("invalid rpn notation\n");
     if (chars(str[0]))
     {
+
         first = rpn.top();
         rpn.pop();
         second = rpn.top();
         rpn.pop();
         rpn.push(this->apply_operation(str[0], first, second));
+        return ;
     }
+     throw std::runtime_error("invalid rpn notation\n");
 }
 
 int    RPN::apply_operation(int op, int num1, int num2)
@@ -92,7 +92,7 @@ int    RPN::apply_operation(int op, int num1, int num2)
     case 42:
         return (num1 * num2);
     case 47:
-        return (num1 / num2);
+        return ((num2) ? num1 / num2 : throw "Error");
     default:
         return (0);
     }
@@ -100,7 +100,7 @@ int    RPN::apply_operation(int op, int num1, int num2)
 }
 int RPN::get_res()
 {
-    if (rpn.size() > 1)
+    if (rpn.size()  != 1)
             throw std::runtime_error("invalid rpn notation\n");
 
     return (rpn.top());

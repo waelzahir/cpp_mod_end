@@ -11,9 +11,14 @@ int main(int ac, char   **av)
         rpn.parse_expretion(av[1]);
         std::cout << rpn.get_res() << std::endl;
     }
+    catch (const char * e)
+    {
+        std::cerr << e << std::endl;
+        return (0);
+    }
     catch (std::exception & e)
     {
-        std::cout << e.what();
+        std::cerr << e.what();
         return (0);
     }
 }

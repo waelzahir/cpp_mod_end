@@ -10,7 +10,6 @@ class RPN
     private:
         std::string expr;
         int i;
-        int acumulator;
         std::stack<int> rpn;
     public:
     

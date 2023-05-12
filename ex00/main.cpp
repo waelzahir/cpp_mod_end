@@ -11,11 +11,11 @@ int main(int ac, char   **av)
     try
     {
         db.set_main_db("data.csv");
-        db.printmap();
         db.evaluate(av[1]);
     }
-    catch (std::exception & e)
+   catch (const char * e)
     {
-        std::cout << e.what();
+        std::cerr << e << std::endl;
+        return (0);
     }
 }

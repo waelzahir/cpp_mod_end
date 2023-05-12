@@ -26,6 +26,5 @@ class   BTCdb
     int date_toNum(std::string date);
     int check_exchange_date(std::string date);
     int check_amount_to_calc(std::string str, std::string date);
-    void    printmap();
 };
 #endif

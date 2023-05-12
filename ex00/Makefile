@@ -1,6 +1,6 @@
 NAME= btc
 CC= c++
-CFLAGS= -Wall -Wextra -Werror 
+CFLAGS= -Wall -Wextra
 MAIN= main.cpp
 
 NAMES= BitcoinExchange

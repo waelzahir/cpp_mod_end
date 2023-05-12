@@ -94,7 +94,7 @@ void    BTCdb::set_main_db(std::string file)
         if (line[10] != ',')
             throw std::runtime_error("please use comma directly after the date \n");
         amount = this->check_amount_format(line.substr(11 , line.length() - 10));
-        this->map.insert({line.substr(0, 10), amount });
+        this->map.insert(std::make_pair(line.substr(0, 10), amount ));
     }
     csvfile.close();
 }
@@ -179,6 +179,15 @@ int BTCdb::check_amount_to_calc(std::string str, std::string date)
     if (aunt > 1000)
         return std::cout << "Error: too large a number.\n", 1;
     
-    std::cout << date << " => "<< str << " => " << map.lower_bound(date)->second * aunt<< std::endl;
+    try
+    {
+        map.at((*(--map.lower_bound(date))).first);
+        std::cout << date << " => "<< str << " => " << (*(--map.lower_bound(date))).second * aunt<< std::endl;
+    }
+    catch(...)
+    {
+        std::cerr << "e.what()" << '\n';
+    }
+    
     return (0);
 }

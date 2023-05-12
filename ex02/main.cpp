@@ -2,24 +2,26 @@
 
 int main(int ac, char   **av)
 {
-    PmergeMe al;
-    double now;
-    if (ac == 1)
-        return (0);
-    try
-    { 
-        al.parse(av[1]);
-        al.print_vec("before")
-        now = what_time();
-        al.sort_vec();
-        std::cout << what_time() - now<< " in us" <<std::endl;
-        
-        now = what_time();
-        al.sort_deque();
-        std::cout << what_time() - now<<  " in us" <<std::endl;
-    }
-    catch (std::exception &e)
+    if (ac < 3)
     {
-        std::cout << e.what() ;
+        std::cout << "less than two numbers to compare\n";
+        return 0;
     }
+    PmergeMe    merge;
+    try
+    {
+        merge.store_data(av + 1);
+        merge.set_stamp();
+        merge.sort_vec();
+        merge.get_time(1);
+        merge.set_stamp();
+        merge.sort_deque();
+        merge.get_time(2);
+        merge.print_res(av + 1);
+    }
+    catch (const    char    *ex)
+    {
+        std::cerr << ex;
+    }
+
 }

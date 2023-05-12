@@ -5,25 +5,31 @@
 #include <vector>
 #include <deque>
 #include <sys/time.h>
+
+
 class PmergeMe
 {
-    private:
-        std::vector <int> vec;
-        std::deque <int> deq;
-         std::string str;
-        int i;
+
     public:
-    PmergeMe();
-    PmergeMe(const PmergeMe &rhs);
-    ~PmergeMe();
-    void    parse(std::string str);
-    int     get_number();
-    void    iter();
-    void    skip_spaces();
-    char    cursor();
-    void    is_valid();
-    void    sort_vec();
-    void    sort_deque();
+        PmergeMe();
+        PmergeMe(const  PmergeMe &rhs);
+        PmergeMe &operator = (const  PmergeMe &rhs);
+        void    set_stamp(void);
+        void    get_time(int i);
+        void    store_data(char     **nums);
+        void    not_valid(std::string str);
+        void    sort_vec();
+        void    sort_deque();
+        void    print_res(char  **nums);
+
+    private:
+        long stamp;
+        long t1;
+        long t2;
+        std::vector<int> op1;
+        std::deque<int>  op2;
+
 };
+
 long	what_time(void);
 #endif

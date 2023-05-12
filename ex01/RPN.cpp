@@ -54,7 +54,7 @@ void    RPN::parse_expretion(std::string line)
             break ;
         this->decide(this->get_token());
         if (this->is_valid())
-            throw std::runtime_error("invalid character\n");
+            throw "invalid character";
     }
 }
 void    RPN::decide(std::string str)
@@ -67,7 +67,7 @@ void    RPN::decide(std::string str)
             return ;
         }
     if (rpn.size() < 2)
-        throw std::runtime_error("invalid rpn notation\n");
+        throw "invalid rpn notation";
     if (chars(str[0]))
     {
 
@@ -78,7 +78,7 @@ void    RPN::decide(std::string str)
         rpn.push(this->apply_operation(str[0], first, second));
         return ;
     }
-     throw std::runtime_error("invalid rpn notation\n");
+    throw "invalid rpn notation";
 }
 
 int    RPN::apply_operation(int op, int num1, int num2)
@@ -101,7 +101,7 @@ int    RPN::apply_operation(int op, int num1, int num2)
 int RPN::get_res()
 {
     if (rpn.size()  != 1)
-            throw std::runtime_error("invalid rpn notation\n");
+        throw "invalid rpn notation";
 
     return (rpn.top());
 }

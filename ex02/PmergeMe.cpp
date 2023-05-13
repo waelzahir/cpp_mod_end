@@ -37,6 +37,8 @@ void	PmergeMe::not_valid(std::string str)
 {
 	if (!str.length())
 		throw "Error empty argument\n";
+	if (str[0] == '0' && str.size() != 1)
+		throw "number cant start with 0\n";
 	for (size_t i = 0; i < str.length(); i++)
 	{
 		if (!isdigit(str[i]))
@@ -67,38 +69,32 @@ void    PmergeMe::print_res(char  **nums)
 	}
 	std::cout << "\n";
 	std::cout << "After: ";
-	for (size_t i = 0; i < this->sorted.size(); i++)
+	for (size_t i = 0; i < this->vector.size(); i++)
 	{
-		std::cout << this->sorted[i] << " ";
+		std::cout << this->vector[i] << " ";
 	}
 	std::cout << "\n";
 	std::cout << "After: ";
-	for (size_t i = 0; i < this->op2.size(); i++)
+	for (size_t i = 0; i < this->deque.size(); i++)
 	{
-		std::cout << this->op1[i] << " ";
+		std::cout << this->deque[i] << " ";
 	}
 	std::cout << "\n";
-	std::cout << "Time to process a range of " << this->op1.size() << " elements with std::vector : " << this->t1 <<  " microseconds"<<std::endl;
-	std::cout << "Time to process a range of " << this->op2.size() << " elements with std::deque : " << this->t2 << " microseconds"<<std::endl;
+	std::cout << "Time to process a range of " << this->vector.size() << " elements with std::vector : " << this->t1 <<  " microseconds"<<std::endl;
+	std::cout << "Time to process a range of " << this->deque.size() << " elements with std::deque : " << this->t2 << " microseconds"<<std::endl;
 }
 
 void    PmergeMe::sort_vec()
 {
 	this->mergesort(this->op1);
-	for (size_t i = 0; i < sorted.size(); i++)
-	{
-		std::cout  << "|" << sorted[i] << "|\n";
-	}
 }
 void    PmergeMe::sort_deque()
 {
-	int i = 0;
-	while (i < 2000)
-		i++;
+	this->mergesort(this->op2);
 }
 void     PmergeMe::mergesort(std::vector<int> vec)
 {
-	if (vec.size() < 3)
+	if (vec.size() <= 2)
 		{
 			this->insert(vec);
 			return ;
@@ -111,25 +107,48 @@ void    PmergeMe::insert(std::vector<int> vec)
 	size_t size = 0;
 	if (vec.size() == 2 && vec[0] > vec[1])
 		std::swap(vec[0], vec[1]);
+	if (!this->vector.size())
+	{
+		this->vector.push_back(vec[size]);
+		size++;
+	}
 	while (size != vec.size())
 	{
-		if (this->sorted.size())
-		{
-			std::vector<int>::iterator st = this->sorted.begin();
-			std::vector<int>::iterator en = this->sorted.end();
-			while ( st != en && vec[size] > *st)
-			{
+			std::vector<int>::iterator st = this->vector.begin();
+			std::vector<int>::iterator en = this->vector.end();
+			while (st != en && vec[size] > *st)
 				st++;
-			}
-			this->sorted.insert(st, vec[size]);
+			this->vector.insert(st, vec[size]);
 			size++;
-		}
-		else
-			{
-				this->sorted.push_back(vec[size]);
-				size++;
-			}
-		std::cout<< vec.size() << std::endl;
 	}
-	
+}
+void     PmergeMe::mergesort(std::deque<int> deq)
+{
+	if (deq.size() <= 2)
+		{
+			this->insert(deq);
+			return ;
+		}
+	this->mergesort(std::deque<int>(deq.begin(), deq.begin() + (deq.size() / 2)));
+	this->mergesort(std::deque<int>(deq.begin() + (deq.size() / 2), deq.end()));
+}
+void    PmergeMe::insert(std::deque<int> deq)
+{
+	size_t size = 0;
+	if (deq.size() == 2 && deq[0] > deq[1])
+		std::swap(deq[0], deq[1]);
+	if (!this->deque.size())
+	{
+		this->deque.push_back(deq[size]);
+		size++;
+	}
+	while (size != deq.size())
+	{
+			std::deque<int>::iterator st = this->deque.begin();
+			std::deque<int>::iterator en = this->deque.end();
+			while (st != en && deq[size] > *st)
+				st++;
+			this->deque.insert(st, deq[size]);
+			size++;
+	}
 }

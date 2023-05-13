@@ -57,18 +57,7 @@ void    PmergeMe::store_data(char     **nums)
 		this->op2.push_back(this->op1[this->op1.size() - 1]);	
 	}
 }
-void    PmergeMe::sort_vec()
-{
-	int i = 0;
-	while (i < 2000)
-		i++;
-}
-void    PmergeMe::sort_deque()
-{
-	int i = 0;
-	while (i < 2000)
-		i++;
-}
+
 void    PmergeMe::print_res(char  **nums)
 {
 	std::cout << "Before: ";
@@ -78,9 +67,9 @@ void    PmergeMe::print_res(char  **nums)
 	}
 	std::cout << "\n";
 	std::cout << "After: ";
-	for (size_t i = 0; i < this->op1.size(); i++)
+	for (size_t i = 0; i < this->sorted.size(); i++)
 	{
-		std::cout << this->op1[i] << " ";
+		std::cout << this->sorted[i] << " ";
 	}
 	std::cout << "\n";
 	std::cout << "After: ";
@@ -91,4 +80,60 @@ void    PmergeMe::print_res(char  **nums)
 	std::cout << "\n";
 	std::cout << "Time to process a range of " << this->op1.size() << " elements with std::vector : " << this->t1 <<  " microseconds"<<std::endl;
 	std::cout << "Time to process a range of " << this->op2.size() << " elements with std::deque : " << this->t2 << " microseconds"<<std::endl;
+}
+
+void    PmergeMe::sort_vec()
+{
+	this->mergesort(this->op1);
+	for (size_t i = 0; i < sorted.size(); i++)
+	{
+		std::cout  << "|" << sorted[i] << "|\n";
+	}
+}
+void    PmergeMe::sort_deque()
+{
+	int i = 0;
+	while (i < 2000)
+		i++;
+}
+void     PmergeMe::mergesort(std::vector<int> vec)
+{
+	if (vec.size() < 3)
+		{
+			this->insert(vec);
+			return ;
+		}
+	this->mergesort(std::vector<int>(vec.begin(), vec.begin() + (vec.size() / 2)));
+	this->mergesort(std::vector<int>( vec.begin() + (vec.size() / 2), vec.end()));
+}
+void    PmergeMe::insert(std::vector<int> vec)
+{
+	if (vec.size() == 2 && vec[0] > vec[1])
+		std::swap(vec[0], vec[1]);
+	while (vec.size())
+	{
+		int index = vec.size() - 1;
+		if (this->sorted.size())
+		{
+			std::vector<int>::iterator st = this->sorted.begin();
+			std::vector<int>::iterator en = this->sorted.end();
+			while ( st != en)
+			{
+				if (vec[index] <= *st || (st + 1 == en))
+					{
+					this->sorted.insert(st, vec[index]);
+					vec.pop_back();
+					break ;
+				}
+				st++;
+			}
+		}
+		else
+			{
+				this->sorted.push_back(vec[index]);
+				vec.pop_back();
+			}
+		std::cout<< vec.size() << std::endl;
+	}
+	
 }

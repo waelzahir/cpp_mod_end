@@ -21,12 +21,15 @@ class PmergeMe
         void    sort_vec();
         void    sort_deque();
         void    print_res(char  **nums);
+        void    mergesort(std::vector<int> vec);
+        void    insert(std::vector<int> vec);
 
     private:
         long stamp;
         long t1;
         long t2;
         std::vector<int> op1;
+        std::vector<int> sorted;
         std::deque<int>  op2;
 
 };

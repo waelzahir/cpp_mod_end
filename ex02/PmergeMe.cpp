@@ -108,30 +108,26 @@ void     PmergeMe::mergesort(std::vector<int> vec)
 }
 void    PmergeMe::insert(std::vector<int> vec)
 {
+	size_t size = 0;
 	if (vec.size() == 2 && vec[0] > vec[1])
 		std::swap(vec[0], vec[1]);
-	while (vec.size())
+	while (size != vec.size())
 	{
-		int index = vec.size() - 1;
 		if (this->sorted.size())
 		{
 			std::vector<int>::iterator st = this->sorted.begin();
 			std::vector<int>::iterator en = this->sorted.end();
-			while ( st != en)
+			while ( st != en && vec[size] > *st)
 			{
-				if (vec[index] <= *st || (st + 1 == en))
-					{
-					this->sorted.insert(st, vec[index]);
-					vec.pop_back();
-					break ;
-				}
 				st++;
 			}
+			this->sorted.insert(st, vec[size]);
+			size++;
 		}
 		else
 			{
-				this->sorted.push_back(vec[index]);
-				vec.pop_back();
+				this->sorted.push_back(vec[size]);
+				size++;
 			}
 		std::cout<< vec.size() << std::endl;
 	}

@@ -5,7 +5,7 @@ int main(int ac, char   **av)
     BTCdb db;
     if (ac != 2)
     {
-        std::cout << "Usage: "<< av[0] <<" [file]" << std::endl;
+        std::cout << "Usage: "<< av[0] << " [file]" << std::endl;
         return 0;
     }
     try

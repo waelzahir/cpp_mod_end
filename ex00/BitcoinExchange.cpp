@@ -49,7 +49,7 @@ double    BTCdb::check_amount_format(std::string amount)
     for (size_t i = 0; i < amount.length(); i++)
     {
         if (!isdigit(amount[i]) && amount[i] != '.' )
-            throw  "amout should have only numbers and a point for floats\n";
+            throw  "amout should have only numbers and a point for floats, spaces aren't accepted\n";
         if (amount[i] == '.')
             f++;
         if (f > 1)
@@ -70,9 +70,8 @@ void    BTCdb::set_main_db(std::string file)
 {
     std::ifstream csvfile;
     std::string     line;
+    
     double   amount;
-    if (file.length() < 4 || this->check_csv(file))
-        throw "database file is not csv\n";
     csvfile.open(file.c_str(), std::ios::in);
     if (!csvfile.is_open())
         throw  "coudn't open csv file\n";
@@ -87,9 +86,9 @@ void    BTCdb::set_main_db(std::string file)
             throw "we expect the time to be 10 char in lenght, if you use one digit number please padd it with a zero\n";
         this->check_date_format(line.substr(0, 10), i);
         if (line[10] != ',')
-            throw "please use comma directly after the date \n";
+            throw "expexted comma after the date\n";
         amount = this->check_amount_format(line.substr(11 , line.length() - 10));
-        this->map.insert(std::make_pair(line.substr(0, 10), amount ));
+        this->map.insert(std::pair<std::string, double>(line.substr(0, 10), amount ));
     }
     csvfile.close();
 }
@@ -177,7 +176,7 @@ int BTCdb::check_amount_to_calc(std::string str, std::string date)
     try
     {
         map.at((*(--map.lower_bound(date))).first);
-        std::cout << date << " => "<< str << " => " << (*(--map.lower_bound(date))).second * aunt<< std::endl;
+        std::cout << date << " => "<< str << " => " << (*(--map.lower_bound(date))).second * aunt << std::endl;
     }
     catch(...)
     {

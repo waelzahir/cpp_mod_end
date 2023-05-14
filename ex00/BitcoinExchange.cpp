@@ -43,7 +43,6 @@ void    BTCdb::check_date_format(std::string date, int line)
 double    BTCdb::check_amount_format(std::string amount)
 {
     double aunt;
-    char    *end;
     int f;
     f = 0;
     for (size_t i = 0; i < amount.length(); i++)
@@ -56,7 +55,7 @@ double    BTCdb::check_amount_format(std::string amount)
             throw  "mltiple points are not allowed in values\n";
 
     }
-    aunt = strtod(amount.c_str(), &end);
+    aunt = atof(amount.c_str());
     return aunt;
 }
 int BTCdb::date_toNum(std::string date)
@@ -168,15 +167,21 @@ int BTCdb::check_amount_to_calc(std::string str, std::string date)
     }
     if (p > 1)
         return std::cout << "you cant have more than a point in a value\n", 1;
-       char *end;
-       double aunt = strtod(str.c_str(), &end);
+       double aunt = atof(str.c_str());
     if (aunt > 1000)
         return std::cout << "Error: too large a number.\n", 1;
     
     try
     {
-        map.at((*(--map.lower_bound(date))).first);
-        std::cout << date << " => "<< str << " => " << (*(--map.lower_bound(date))).second * aunt << std::endl;
+        if ((map.lower_bound(date))->first != date)
+           {
+            map.at((*(--map.lower_bound(date))).first);
+            std::cout << date << " => "<< str << " => " << (--map.lower_bound(date))->second * aunt << std::endl;
+           }
+           else
+                std::cout << date << " => "<< str << " => " << (map.lower_bound(date))->second * aunt << std::endl;
+
+
     }
     catch(...)
     {

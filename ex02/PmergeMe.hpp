@@ -27,9 +27,9 @@ class PmergeMe
         void    insert(std::deque<int> vec);
     
     private:
-        long stamp;
-        long t1;
-        long t2;
+        std::clock_t stamp;
+        std::clock_t t1;
+        std::clock_t t2;
         std::vector<int> op1;
         std::vector<int> vector;
         std::deque<int>  op2;

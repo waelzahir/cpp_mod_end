@@ -6,6 +6,7 @@ RPN::RPN()
 }
 RPN::RPN(const RPN &rhs)
 {
+    
     i = 0;
     *this = rhs;
 }

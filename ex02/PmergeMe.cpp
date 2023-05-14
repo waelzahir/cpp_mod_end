@@ -3,10 +3,8 @@
 
 long	what_time(void)
 {
-	struct timeval	tv;
-
-	gettimeofday(&tv, NULL);
-	return ((tv.tv_sec * 1000000) + (tv.tv_usec ));
+	
+	return (std::clock());
 }
 
 template <typename T>
@@ -101,8 +99,8 @@ void    PmergeMe::print_res(char  **nums)
 		std::cout << this->deque[i] << " ";
 	}
 	std::cout << "\n";
-	std::cout << "Time to process a range of " << this->vector.size() << " elements with std::vector : " << this->t1 <<  " microseconds"<<std::endl;
-	std::cout << "Time to process a range of " << this->deque.size() << " elements with std::deque : " << this->t2 << " microseconds"<<std::endl;
+	std::cout << "Time to process a range of " << this->vector.size() << " elements with std::vector : " << 1000.0 * this->t1 / CLOCKS_PER_SEC <<  " us"<<std::endl;
+	std::cout << "Time to process a range of " << this->deque.size() << " elements with std::deque : " << 1000.0 * this->t2 /CLOCKS_PER_SEC << " us"<<std::endl;
 }
 
 void    PmergeMe::sort_vec()

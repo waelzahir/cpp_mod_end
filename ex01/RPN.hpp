@@ -11,6 +11,7 @@ class RPN
         std::string expr;
         int i;
         std::stack<int> rpn;
+        
     public:
     
     RPN();
